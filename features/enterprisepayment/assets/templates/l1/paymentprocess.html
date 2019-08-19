@@ -1,0 +1,78 @@
+<ion-view>
+    <ion-content overflow-scroll="false">
+       <div>
+            <div class="item item-custom amountdiv ">
+                <div>
+                    <h3>{{"Total Payment" | translate}}</h3>
+                    <h2>{{currency}}{{amount}}</h2>
+                </div>
+            </div>
+            <div class="optionsdiv">
+                <h4>{{"Select Payment Options" | translate}}</h4>
+            </div>
+            <div>
+                <div ng-if="methods.length == 0">
+                    <p>{{"There is no gateway detail present for payment" | translate}}</p>
+                </div>
+
+                <div ng-if="methods.length > 0" ng-repeat="method in methods">
+                    
+                    <button class="button button-block button-stable butt_img" ng-if="method.code == 'paypal' && method.status == 1" ng-click= "gotoTransaction(method.gid,method.code)" ng-disabled="amount <= 0">
+                        <img class="images_class"  ng-src="{{base_url}}/app/local/modules/Enterprisepayment/resources/media/library/paypal.png">
+                        <i class="ion-chevron-right"></i>
+                    </button> 
+                    <button class="button button-block button-stable butt_img" ng-if="method.code == 'stripe' && method.status == 1" ng-disabled="amount <= 0" ng-click= "gotoTransaction(method.gid,method.code)">
+                        <img class="images_class"  ng-src="{{base_url}}/app/local/modules/Enterprisepayment/resources/media/library/stripe.png">
+                        <i class="ion-chevron-right"></i>
+                    </button>
+                    <button class="button button-block button-stable butt_img" ng-if="method.code == 'bank_transfer' && method.status == 1" ng-disabled="amount <= 0" ng-click= "gotoTransaction(method.gid,method.code)">
+                        <img class="images_class"  ng-src="{{base_url}}/app/local/modules/Enterprisepayment/resources/media/library/bank_transfer.png">
+                        <i class="ion-chevron-right"></i>
+                    </button>
+                    <button class="button button-block button-stable butt_img" ng-if="method.code == 'cash' && method.status == 1" ng-disabled="amount <= 0" ng-click= "gotoTransaction(method.gid,method.code)">
+                        <img class="images_class"  ng-src="{{base_url}}/app/local/modules/Enterprisepayment/resources/media/library/cash.png">
+                        <i class="ion-chevron-right"></i>
+                    </button>
+                     <button class="button button-block button-stable butt_img" ng-if="method.code == 'payu_latam' && method.status == 1" ng-disabled="amount <= 0" ng-click= "gotoTransaction(method.gid,method.code)">
+                        <img class="images_class"  ng-src="{{base_url}}/app/local/modules/Enterprisepayment/resources/media/library/payu_latam.png">
+                        <i class="ion-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+       </div>
+    </ion-content>
+    <style type="text/css">
+        .optionsdiv {
+            padding: 0px 10px;
+        }
+
+        .amountdiv {
+            text-align: center;
+            padding: 35px;
+            background: none !important;
+            border: none !important;
+            padding: 50px !important;
+        }
+
+        .amountdiv h2 {
+            font-size: 35px !important;
+        }
+
+        .amountdiv {
+            background: #fff !important;
+        }
+
+        .images_class {
+            padding: 10px 0px 0px 0px;
+            height: 36px;
+        }
+        .ion-chevron-right {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+        }
+        .butt_img{
+            border: 1px solid gray !important;
+        }
+    </style>
+</ion-view>

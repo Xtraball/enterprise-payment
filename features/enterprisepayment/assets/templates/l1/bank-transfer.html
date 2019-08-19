@@ -1,0 +1,27 @@
+<ion-modal-view back-button="true">
+	<ion-header-bar class="bar-custom bar bar-header">
+	<button class = "button icon-left ion-chevron-left button-clear button-dark" ng-click = "bankTransferModel.hide()"></button>
+		<h1 class = "title cate-list-head">{{"Bank Transfer" | translate}}</h1>
+	</ion-header-bar>
+	<ion-content class="backgruound-gradiant">
+		<div class="list">
+		  <label class="item item-input" ng-repeat="(key, data) in bank_data track by $index">
+		    <span class="input-label">{{key}} : </span>
+		    <input type="text" value="{{data}}">
+		  </label>
+		  
+		</div>
+
+		<div class="row">
+			<div class="col col-25"></div>
+			<div class="col col-50">
+				<button class="button button-positive center" type="submit"  ng-click="bank_transfer_proceed()">
+				  {{"Proceed" | translate}}
+				</button>
+			</div>
+			<div class="col col-25"></div>
+		</div>
+
+			
+	</ion-content>
+</ion-modal-view>

@@ -1,0 +1,11 @@
+{
+  "name": "Enterprisepayment",
+  "decription": "enterprisepayment Module",
+  "version": "1.0.10",
+  "type": "module",
+  "assets": {
+    "path": "resources/var/apps/modules/enterprisepayment",
+    "folder": "enterprisepayment"
+  }
+}
+

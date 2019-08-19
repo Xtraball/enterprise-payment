@@ -1,0 +1,91 @@
+<ion-modal-view back-button="true">
+
+	
+	<ion-header-bar class="bar-custom bar bar-header">
+	<button class = "button icon-left ion-chevron-left button-clear button-dark" ng-click = "stripeModel.hide()"></button>
+		<h1 class = "title cate-list-head">{{"Payment Form" | translate}}</h1>
+	</ion-header-bar>
+	<ion-content class="backgruound-gradiant">
+		<form class="model-form" method="post" name="payulatamform" class="payulatamform" method="post" ng-submit="payulatamformsubmit(payulatamform.$valid,formData)" novalidate>
+			<div class="list">
+			  <label class="item item-input item-stacked-label">
+			    <span class="input-label">{{"Credit Card Number" | translate}}</span>
+			    <input type="number" name="number" ng-model="formData.number" placeholder="4242 4242 4242 4242" ng-pattern="/^[0-9]+$/" ng-minlength="15"
+      			ng-maxlength="16" required>
+			  </label>
+			  <span class="error" ng-show="payulatamform.$submitted &&         payulatamform.number.$error.required ">
+	              {{"Credit card required" | translate}}
+	            </span>
+	            <span class="error" ng-show="(payulatamform.$submitted ||  payulatamform.number.$dirty) && payulatamform.number.$error.pattern"> {{"Credit card must consist of only numbers" | translate}}
+	            </span>
+	            <span class="error" ng-show="(payulatamform.$submitted ||  payulatamform.number.$dirty) && (payulatamform.number.$error.minlength || payulatamform.number.$error.maxlength)"> 
+	              {{"Credit card must be 15-19 digits" | translate}}
+	            </span>
+			  <label class="item item-input item-select">
+			    <div class="input-label">
+			      {{"Month" | translate}}
+			    </div>
+			    <select name="exp_month" ng-model="formData.exp_month" required>
+			      <option value="">{{"Select month" | translate}}</option>
+			      <option ng-repeat="month in month" >{{month}}</option>
+			    </select>
+			  </label>
+			  <span class="error" ng-show="payulatamform.$submitted &&         payulatamform.exp_month.$error.required ">
+	              {{"Expiration month required" | translate}}
+	            </span>
+			  <label class="item item-input item-select">
+			    <div class="input-label">
+			      {{"Year" | translate}}
+			    </div>
+			    <select name="exp_year" ng-model="formData.exp_year" required>
+		    	  <option value="">{{"Select year" | translate}}</option>
+			      <option  ng-repeat="year in year">{{year}}</option>
+			    </select>
+			  </label>
+			  <span class="error" ng-show="payulatamform.$submitted &&         payulatamform.exp_year.$error.required ">
+	              {{"Expiration year required" | translate}}
+	            </span>
+			  <label class="item item-input item-stacked-label">
+			    <span class="input-label" >CVC</span>
+			    <input type="number" name="cvc" ng-model="formData.cvc" placeholder="123"ng-pattern="/^[0-9]+$/" ng-minlength="3"
+      			ng-maxlength="4" required>
+			  </label>
+			   <span class="error" ng-show="payulatamform.$submitted &&         payulatamform.cvc.$error.required ">
+	              {{"CVC required" | translate}}
+	            </span>
+	            <span class="error" ng-show="(payulatamform.$submitted ||  payulatamform.cvc.$dirty) && payulatamform.cvc.$error.pattern"> {{"Credit cardCVC must consist of only numbers" | translate}}
+	            </span>
+	            <span class="error" ng-show="(payulatamform.$submitted ||  payulatamform.cvc.$dirty) && (payulatamform.cvc.$error.minlength || payulatamform.cvc.$error.maxlength)"> 
+	              {{"CVC must be 3-4 digits" | translate}}
+	            </span>
+	             <label class="item item-input item-stacked-label">
+			    <span class="input-label">{{"Cardholder's Full Name(Optional)" | translate}}</span>
+			    <input type="text" name="name" ng-model="formData.name" placeholder="John doe">
+			  </label>
+			 
+			</div>
+			<div class="row">
+				<div class="col col-25"></div>
+				<div class="col col-50">
+					<button class="button button-positive center" type="submit" >
+					  {{"Proceed" | translate}}
+					</button>
+				</div>
+				<div class="col col-25"></div>
+			</div>
+			
+		</form>
+	</ion-content>
+	<style>
+		ion-content.backgruound-gradiant.scroll-content.ionic-scroll.has-header {
+		    background: white !important;
+		}
+		.button.button-positive{
+			width: 100%;
+		}
+		.error{
+			font-size: 12px;
+			color: red;
+		}
+	</style>	
+</ion-modal-view>

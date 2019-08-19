@@ -1,0 +1,30 @@
+<ion-view>
+    <ion-content overflow-scroll="false" ng-if="homeView == true">
+    
+       <div class="card balanced">
+            <form class="model-form" method="post" name="payform" class="payform" method="post" ng-submit="openpayment(payform.$valid,amount)" novalidate>
+                <div class="item item-custom">
+                    <span class="input-label">{{"Pay Amount" | translate}}</span>
+                    <input name="amount" placeholder="{{'Please enter amount' | translate}}" type="number" ng-model="amount" ng-change="amountcheck(amount)" required>
+                   
+                     <span class="error" ng-show="payform.$submitted &&         payform.amount.$error.required ">
+                      {{"Amount required" | translate}}
+                    </span>
+                </div>
+                <div class="item item-custom item-text-wrap">
+                   <div class="cart-btn-continue" >
+                        <button class="button button-block button-custom Continue-btn">
+                            {{"Checkout" | translate}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+    <style type="text/css">
+        .error{
+            font-size: 12px;
+            color: red;
+        }
+    </style>
+</ion-view>

@@ -1,0 +1,123 @@
+Update successfully
+Please fill paypal details
+Please fill in the following fields
+Success
+Don't have PAypal Credential
+An error occurred during process. Please try again later
+Error
+Unable to process payment through paypal
+OK
+Information
+Payment Successful
+Payment successfully done
+Please enter amount
+Please enter correct credentials
+Please enter correct amount
+Pay Amount
+Checkout
+Total Payment
+Select Payment Options
+There is no gateway detail present for payment
+Payment Form
+Credit Card Number
+Credit card required
+Credit card must consist of only numbers
+Credit card must be 15-19 digits
+Month
+Select month
+Expiration month required
+Year
+Select year
+Expiration year required
+CVC required
+Credit cardCVC must consist of only numbers
+CVC must be 3-4 digits
+Proceed	
+Continue
+Payment Method
+Transactions
+Setting
+Manage
+Method
+Status
+Action
+Edit
+Close
+Transaction Details
+Customer Name
+Amount
+Gateway Type
+Status
+Paypal
+Stripe
+Fail
+Payment Mode
+Submit
+Sandbox
+Live
+Username
+Signature
+Password
+Sandbox Username
+Sandbox Signature
+Sandbox Password
+Enable/Disable
+No link
+URL
+Test Publish key
+Test Secret key
+Publish key
+Secret key
+External Links
+Search
+Off
+On
+URL
+Link
+Test
+Please enter all paypal credentials after clicking on edit option
+Please enter all stripe credentials after clicking on edit option
+Amount required
+Amount should be greater than zero
+Transaction Date
+Amount must consist only numbers
+Add more fields
+Field
+Name
+Type
+Save
+text
+number
+textarea
+Please save the fields from setting tab
+Bank transfer settings
+Bank transfer
+Return url
+Your payment have been done successfully
+Additional Field
+If you enter state name of your module,  then it must redirect after payment complete on that state, otherwise it should redirect into default URL  that you have selected from drop down in setting tab
+State name
+Premimum Payment
+No matching records found
+First
+Last
+Next
+Previous
+Showing
+to
+of
+entries
+PayU Latam App Id
+Public API Key
+Private API Key
+Test PayU Latam App Id
+Test Public API Key
+Test Private API Key
+Manually
+Dynamically
+Module
+Delete
+Manage Return Url
+This is the return value id of module which you have entered state name field
+If you want to return specific state,then please enter state name
+Return value id
