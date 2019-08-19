@@ -3,23 +3,35 @@
 /**
  * Class Enterprisepayment_Model_Db_Table_Gatewaydetail
  */
-class Enterprisepayment_Model_Db_Table_Gatewaydetail extends Core_Model_Db_Table {
-	protected $_name = "enterprisepayment_gateway_detail";
-	protected $_primary = 'id';
+class Enterprisepayment_Model_Db_Table_Gatewaydetail extends Core_Model_Db_Table
+{
+    /**
+     * @var string
+     */
+    protected $_name = "enterprisepayment_gateway_detail";
+    /**
+     * @var string
+     */
+    protected $_primary = 'id';
 
-	/*get All gateways*/
-	public function getAllMethods($value_id) {
-		$selectData = array();
+    /**
+     * @param $value_id
+     * @return array
+     */
+    public function getAllMethods($value_id)
+    {
+        $selectData = [];
 
-		$select = $this->_db->select()
-			->from(array('egd' => $this->_name), array('id', 'payment_mode', 'gid', 'value_id','status'))
-			->join(array('eg' => 'enterprisepayment_gateways'), 'eg.id = egd.gid', array('name','code'))
-			->where('egd.value_id = ?', $value_id)
-			->where('egd.status = 1');
+        $select = $this->_db->select()
+            ->from(['egd' => $this->_name], ['id', 'payment_mode', 'gid', 'value_id', 'status'])
+            ->join(['eg' => 'enterprisepayment_gateways'], 'eg.id = egd.gid', ['name', 'code'])
+            ->where('egd.value_id = ?', $value_id)
+            ->where('egd.status = 1');
 
-		$selectData = $this->_db->fetchAll($select);
-		return $selectData;
-	}
-	
+        $selectData = $this->_db->fetchAll($select);
+
+        return $selectData;
+    }
+
 
 }

@@ -1,38 +1,39 @@
 {
-    "name": "Enterprisepayment",
-    "code": "enterprisepayment",
-    "version": "1.0.9",
-    "category": "social",
-    "model": "Enterprisepayment_Model_Enterprisepayment",
-    "desktop_uri": "enterprisepayment/application/",
-    "routes": [
-        {
-            "root": true,
-            "state": "enterprisepayment",
-            "controller": "EnterprisepaymentController",
-            "url": "enterprisepayment/mobile_list/index/value_id/:value_id",
-            "template": "l1/view.html",
-            "cache": false
-        },{
-            "root": true,
-            "state": "enterprisepayment_process",
-            "controller": "EnterprisepaymentProcessController",
-            "url": "enterprisepayment/mobile_list/index/value_id/:value_id/amount/:amount/return_value_id/:return_value_id/order_id/:order_id/meta_data/:meta_data",
-            "template": "l1/paymentprocess.html",
-            "cache": false
-        }
-    ],
-    "icons": [
-        "icons/enterprisepayment-flat.png"
-    ],
-    "files": [
-        "js/controllers/enterprisepayment.js",
-        "js/factory/enterprisepayment.js",
-        "js/stripe.js",
-        "css/enterprisepayment.scss"
-    ],
-    "compile": true,
-    "use_account": true,
-    "only_once": false,
-    "load_on_start": true
+  "name": "Enterprisepayment",
+  "code": "enterprisepayment",
+  "version": "1.0.9",
+  "category": "social",
+  "model": "Enterprisepayment_Model_Enterprisepayment",
+  "desktop_uri": "enterprisepayment/application/",
+  "routes": [
+    {
+      "root": true,
+      "state": "enterprisepayment",
+      "controller": "EnterprisepaymentController",
+      "url": "enterprisepayment/mobile_list/index/value_id/:value_id",
+      "template": "l1/view.html",
+      "cache": false
+    },
+    {
+      "root": true,
+      "state": "enterprisepayment_process",
+      "controller": "EnterprisepaymentProcessController",
+      "url": "enterprisepayment/mobile_list/index/value_id/:value_id/amount/:amount/return_value_id/:return_value_id/order_id/:order_id/meta_data/:meta_data",
+      "template": "l1/paymentprocess.html",
+      "cache": false
+    }
+  ],
+  "icons": [
+    "icons/enterprisepayment-flat.png"
+  ],
+  "files": [
+    "js/controllers/enterprisepayment.js",
+    "js/factory/enterprisepayment.js",
+    "js/stripe.js",
+    "css/enterprisepayment.scss"
+  ],
+  "compile": true,
+  "use_account": true,
+  "only_once": false,
+  "load_on_start": true
 }

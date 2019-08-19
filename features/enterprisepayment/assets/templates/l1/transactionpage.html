@@ -1,8 +1,13 @@
-<ion-modal-view sb-page-background class="pointwallet">
+<ion-modal-view sb-page-background
+                class="pointwallet">
+
     <ion-header-bar class="bar-custom">
-        <div class="buttons buttons-left header-item" style="transition-duration: 0ms;" ng-click="closeTransaction()">
+        <div class="buttons buttons-left header-item"
+             style="transition-duration: 0ms;"
+             ng-click="closeTransaction()">
             <span class="left-buttons">
-                <button class="button button-clear ng-binding" ng-click="closeTransaction()">
+                <button class="button button-clear ng-binding"
+                        ng-click="closeTransaction()">
                     <i class="icon ion-ios-arrow-back"></i>
                 </button>
             </span>
@@ -11,16 +16,18 @@
     <ion-content>
         <div class="card balanced">
             <div class="item item-custom">
-                <span class="input-label">{{"Pay Amount" | translate}}</span>
-                <input type="text" ng-model="amount">
+                <span class="input-label">{{ ::"Pay Amount" | translate }}</span>
+                <input type="text"
+                       ng-model="amount">
             </div>
             <div class="item item-custom item-text-wrap">
-               <div class="cart-btn-continue" >
-                    <button class="button button-block button-custom Continue-btn" ng-click="payAmount(amount)">
-                        {{"Continue" | translate}}
+                <div class="cart-btn-continue">
+                    <button class="button button-block button-custom Continue-btn"
+                            ng-click="payAmount(amount)">
+                        {{ ::"Continue" | translate }}
                     </button>
                 </div>
             </div>
-       </div>
+        </div>
     </ion-content>
 </ion-modal-view>

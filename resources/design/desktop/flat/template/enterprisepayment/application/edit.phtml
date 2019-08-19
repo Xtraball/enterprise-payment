@@ -10,8 +10,8 @@ $detailmodel = new Enterprisepayment_Model_Gatewaydetail();
 $transactionmodel = new Enterprisepayment_Model_Transaction();
 
 $setting_model = new Enterprisepayment_Model_Setting();
-$setting_data = $setting_model->findAll(array('value_id' => $value_id));
-$get_all_setting_link = array();
+$setting_data = $setting_model->findAll(['value_id' => $value_id]);
+$get_all_setting_link = [];
 foreach ($setting_data as $key => $value) {
     $get_all_url = $value->getdata();
     array_push($get_all_setting_link, $get_all_url);
@@ -19,7 +19,7 @@ foreach ($setting_data as $key => $value) {
 $json_data_setting = json_encode($get_all_setting_link);
 
 $setting_form = new Enterprisepayment_Form_Settingform();
-$setting_form->setElementValueById('value_id',$value_id);
+$setting_form->setElementValueById('value_id', $value_id);
 $gettransaction = $transactionmodel->getTransactions($value_id);
 //$gettransaction = $transactionmodel->findAll(array('value_id' => $value_id))->toArray();
 $gateways = $gatewaysmodel->findAll();
@@ -36,13 +36,16 @@ $counter_of_fields = $length_of_fields + 1;
     <div class="navbar-btn btn-sm"></div>
     <ul class="nav nav-tabs custome_nav" role="tablist">
         <li role="presentation" class="active">
-            <a href="#gateway_tag" aria-controls="knowledge_tag" role="tab" data-toggle="tab"><?php echo __('Payment Method'); ?></a>
+            <a href="#gateway_tag" aria-controls="knowledge_tag" role="tab"
+               data-toggle="tab"><?php echo __('Payment Method'); ?></a>
         </li>
         <li role="presentation">
-            <a href="#transaction_tag" aria-controls="question_tag" role="tab" data-toggle="tab"><?php echo __('Transactions'); ?></a>
+            <a href="#transaction_tag" aria-controls="question_tag" role="tab"
+               data-toggle="tab"><?php echo __('Transactions'); ?></a>
         </li>
         <li role="presentation">
-            <a href="#setting_tab" aria-controls="setting_tab" role="tab" data-toggle="tab"><?php echo __('Setting'); ?></a>
+            <a href="#setting_tab" aria-controls="setting_tab" role="tab"
+               data-toggle="tab"><?php echo __('Setting'); ?></a>
         </li>
     </ul>
 
@@ -51,134 +54,192 @@ $counter_of_fields = $length_of_fields + 1;
         <div role="tabpanel" class="tab-pane active" id="gateway_tag">
             <h3 class="title-editor no-border-radius title-feature-indent">
                 <?php echo __('Manage'); ?>
-                <button type="button" class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items" data-toggle="existing-items">
+                <button type="button"
+                        class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items"
+                        data-toggle="existing-items">
                     <i class="fa fa-chevron-down"></i>
                 </button>
             </h3>
             <div id="existing-items" class="container-fluid first-row-feature  feature-manage-items">
 
                 <!-- Payment detail table -->
-                <table  width="100%" class="table content-white-bkg payment-table" id="payment-table">
+                <table width="100%" class="table content-white-bkg payment-table" id="payment-table">
                     <thead>
-                        <tr class="border-blue">
-                            <th><?php echo __("Method"); ?></th>
-                            <th><?php echo __("Status"); ?></th>
-                            <th></th>
-                        </tr>
+                    <tr class="border-blue">
+                        <th><?php echo __("Method"); ?></th>
+                        <th><?php echo __("Status"); ?></th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($methodsArray as $method): ?>
+                    <?php foreach ($methodsArray as $method): ?>
 
-                            <tr id="gateway_element_<?php echo $method['id']; ?>" class="gateway-manage-element sb-pager" class="gateway-manage-element sb-pager">
-                                <td><?php echo $method['name']?></td>
-                                
-                                <td class="edit-action open-edit">
-                                    <input class="sb-tgl sb-tgl-flip gateway_on_off" id="gateway_on_off_<?php echo $method['id']; ?>" value="off"  rel="<?php echo $method['id']; ?>" <?php echo ($method['status'] == 1) ? "checked=\"checked\"" : ""; ?> value_id="<?php echo $value_id;?>" type="checkbox">
-                                    <label class="sb-tgl-btn" for="gateway_on_off_<?php echo $method['id']; ?>" data-tg-off="<?php echo __("Off"); ?>" data-tg-on="<?php echo __("On"); ?>"></label>                                </td>
+                        <tr id="gateway_element_<?php echo $method['id']; ?>" class="gateway-manage-element sb-pager"
+                            class="gateway-manage-element sb-pager">
+                            <td><?php echo $method['name'] ?></td>
 
-                                    <td>
-                                        <?php if ($method['code'] == 'paypal') : ?>
-                                            <span class="edit-action open-edit" data-form-url="<?php echo __path("/enterprisepayment/application/loadgatewayform", ["gid" => $method['id'], "value_id" => $value_id]); ?>" data-id="gateway_<?php echo $method['id']; ?>" data-role="edit">
-                                                <i class="fa fa-pencil display_tooltip editdetail" title="<?php echo __js("Edit"); ?>" data-id="<?php echo $method['id']; ?>" data-value_id="<?php echo $value_id; ?>" alt="<?php echo __("Edit")?>" title="<?php echo __("Edit")?>"></i>
+                            <td class="edit-action open-edit">
+                                <input class="sb-tgl sb-tgl-flip gateway_on_off"
+                                       id="gateway_on_off_<?php echo $method['id']; ?>" value="off"
+                                       rel="<?php echo $method['id']; ?>" <?php echo ($method['status'] == 1) ? "checked=\"checked\"" : ""; ?>
+                                       value_id="<?php echo $value_id; ?>" type="checkbox">
+                                <label class="sb-tgl-btn" for="gateway_on_off_<?php echo $method['id']; ?>"
+                                       data-tg-off="<?php echo __("Off"); ?>"
+                                       data-tg-on="<?php echo __("On"); ?>"></label></td>
 
-                                            </span>
-                                            <table>
-                                                <tr class="edit-form" id="detail_<?php echo $method['id']; ?>" data-id="gateway_<?php echo $method['id']; ?>"  style="display:none">
-                                                    <td colspan="7">
-                                                        <p class="close-edit" data-clear="true" data-id="gateway<?php echo $method['id']; ?>">
-                                                            <i class="fa fa-times"></i><?php echo __("Close") ?>
-                                                        </p>
-                                                    </td>
-
-                                                </tr>
-                                            </table>
-                                        <?php endif; ?>
-                                        <?php if ($method['code'] == 'stripe') : ?>
-
-                                            <span class="edit-action open-edit" data-form-url="<?php echo __path("/enterprisepayment/application/loadstripeform", ["gid" => $method['id'], "value_id" => $value_id]); ?>" data-id="gateway_<?php echo $method['id']; ?>" data-role="edit">
-                                                <i class="fa fa-pencil display_tooltip editdetail2" title="<?php echo __js("Edit"); ?>" data-id="<?php echo $method['id']; ?>" data-value_id="<?php echo $value_id; ?>" alt="<?php echo __("Edit")?>" title="<?php echo __("Edit")?>"></i>
+                            <td>
+                                <?php if ($method['code'] == 'paypal') : ?>
+                                    <span class="edit-action open-edit"
+                                          data-form-url="<?php echo __path("/enterprisepayment/application/loadgatewayform", ["gid" => $method['id'], "value_id" => $value_id]); ?>"
+                                          data-id="gateway_<?php echo $method['id']; ?>" data-role="edit">
+                                                <i class="fa fa-pencil display_tooltip editdetail"
+                                                   title="<?php echo __js("Edit"); ?>"
+                                                   data-id="<?php echo $method['id']; ?>"
+                                                   data-value_id="<?php echo $value_id; ?>"
+                                                   alt="<?php echo __("Edit") ?>" title="<?php echo __("Edit") ?>"></i>
 
                                             </span>
-                                            <table>
-                                                <tr class="edit-form" id="detail_<?php echo $method['id']; ?>" data-id="gateway_<?php echo $method['id']; ?>"  style="display: none;">
-                                                    <td colspan="7">
-                                                        <p class="close-edit" data-clear="true" data-id="gateway<?php echo $method['id']; ?>">
-                                                            <i class="fa fa-times"></i><?php echo __("Close") ?>
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        <?php endif; ?>
-                                        <?php if ($method['code'] == 'bank_transfer') : ?>
+                                    <table>
+                                        <tr class="edit-form" id="detail_<?php echo $method['id']; ?>"
+                                            data-id="gateway_<?php echo $method['id']; ?>" style="display:none">
+                                            <td colspan="7">
+                                                <p class="close-edit" data-clear="true"
+                                                   data-id="gateway<?php echo $method['id']; ?>">
+                                                    <i class="fa fa-times"></i><?php echo __("Close") ?>
+                                                </p>
+                                            </td>
 
-                                            <span class="edit-action open-edit" data-id="gateway_<?php echo $method['id']; ?>" data-role="edit">
-                                                <i class="fa fa-pencil display_tooltip editdetail3" title="<?php echo __js("Edit"); ?>" data-id="<?php echo $method['id']; ?>" data-value_id="<?php echo $value_id; ?>" alt="<?php echo __("Edit")?>" title="<?php echo __("Edit")?>"></i>
+                                        </tr>
+                                    </table>
+                                <?php endif; ?>
+                                <?php if ($method['code'] == 'stripe') : ?>
+
+                                    <span class="edit-action open-edit"
+                                          data-form-url="<?php echo __path("/enterprisepayment/application/loadstripeform", ["gid" => $method['id'], "value_id" => $value_id]); ?>"
+                                          data-id="gateway_<?php echo $method['id']; ?>" data-role="edit">
+                                                <i class="fa fa-pencil display_tooltip editdetail2"
+                                                   title="<?php echo __js("Edit"); ?>"
+                                                   data-id="<?php echo $method['id']; ?>"
+                                                   data-value_id="<?php echo $value_id; ?>"
+                                                   alt="<?php echo __("Edit") ?>" title="<?php echo __("Edit") ?>"></i>
+
+                                            </span>
+                                    <table>
+                                        <tr class="edit-form" id="detail_<?php echo $method['id']; ?>"
+                                            data-id="gateway_<?php echo $method['id']; ?>" style="display: none;">
+                                            <td colspan="7">
+                                                <p class="close-edit" data-clear="true"
+                                                   data-id="gateway<?php echo $method['id']; ?>">
+                                                    <i class="fa fa-times"></i><?php echo __("Close") ?>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                <?php endif; ?>
+                                <?php if ($method['code'] == 'bank_transfer') : ?>
+
+                                    <span class="edit-action open-edit" data-id="gateway_<?php echo $method['id']; ?>"
+                                          data-role="edit">
+                                                <i class="fa fa-pencil display_tooltip editdetail3"
+                                                   title="<?php echo __js("Edit"); ?>"
+                                                   data-id="<?php echo $method['id']; ?>"
+                                                   data-value_id="<?php echo $value_id; ?>"
+                                                   alt="<?php echo __("Edit") ?>" title="<?php echo __("Edit") ?>"></i>
 
                                             </span>
 
-                                            <table>
-                                                <tr class="edit-form" id="detail_<?php echo $method['id']; ?>" data-id="gateway_<?php echo $method['id']; ?>"  style="display: none;">
-                                                    <td colspan="7">
-                                                        <p class="close-edit" data-clear="true" data-id="gateway681">
-                                                            <i class="fa fa-times"></i><?php echo __('Close');?>
-                                                        </p>
-                                                        <?php 
-                                                        $getdata = $detailmodel->findAll(array('value_id' => $value_id,'gid'=> $method['id']));
-                                                        foreach ($getdata as $key => $value) {
-                                                           $getdetails = $value->getData();
-                                                           $getformdata = $getdetails['live_data'];
-                                                       }
-                                                       $jsondata = json_decode($getformdata,true);
-                                                       ?>
-                                                       <form id="bank_transfer_form" method="post" class="form sb-form feature-form form-horizontal create" >
-                                                        <?php foreach($getfields as $fields):
-                                                            $getfieldname = $fields->getFieldName();
-                                                            $getvalue_id = $fields->getValueId();
-                                                            if($getvalue_id == 0 || $getvalue_id == $value_id):
-                                                                ?>
-                                                                <div class="form-group sb-form-line bank_transfer" >
-                                                                    <div class="col-sm-3">
-                                                                        <label class="sb-form-line-title field-label"><?php echo $fields->getFieldName();?></label>
-                                                                        <input name="<?php echo $fields->getId();?>" class="sb-input-username input-flat pull-left clickedit" id="<?php echo $fields->getId()?>" value="<?php echo $getfieldname;?>" color="color-blue" is_form_horizontal="1" type="text" />
-                                                                    </div>
+                                    <table>
+                                        <tr class="edit-form" id="detail_<?php echo $method['id']; ?>"
+                                            data-id="gateway_<?php echo $method['id']; ?>" style="display: none;">
+                                            <td colspan="7">
+                                                <p class="close-edit" data-clear="true" data-id="gateway681">
+                                                    <i class="fa fa-times"></i><?php echo __('Close'); ?>
+                                                </p>
+                                                <?php
+                                                $getdata = $detailmodel->findAll(['value_id' => $value_id, 'gid' => $method['id']]);
+                                                foreach ($getdata as $key => $value) {
+                                                    $getdetails = $value->getData();
+                                                    $getformdata = $getdetails['live_data'];
+                                                }
+                                                $jsondata = json_decode($getformdata, true);
+                                                ?>
+                                                <form id="bank_transfer_form" method="post"
+                                                      class="form sb-form feature-form form-horizontal create">
+                                                    <?php foreach ($getfields as $fields):
+                                                        $getfieldname = $fields->getFieldName();
+                                                        $getvalue_id = $fields->getValueId();
+                                                        if ($getvalue_id == 0 || $getvalue_id == $value_id):
+                                                            ?>
+                                                            <div class="form-group sb-form-line bank_transfer">
+                                                                <div class="col-sm-3">
+                                                                    <label class="sb-form-line-title field-label"><?php echo $fields->getFieldName(); ?></label>
+                                                                    <input name="<?php echo $fields->getId(); ?>"
+                                                                           class="sb-input-username input-flat pull-left clickedit"
+                                                                           id="<?php echo $fields->getId() ?>"
+                                                                           value="<?php echo $getfieldname; ?>"
+                                                                           color="color-blue" is_form_horizontal="1"
+                                                                           type="text"/>
+                                                                </div>
 
-                                                                    <div class="col-sm-7">
-                                                                        <span class="edit-action edit-fields" data-id="gateway_<?php echo $method['id']; ?>" data-role="edit">
-                                                                            <i class="fa fa-pencil display_tooltip editdetail" title="<?php echo __js("Edit"); ?>" data-id="<?php echo $method['id']; ?>" data-value_id="<?php echo $value_id; ?>" alt="<?php echo __("Edit")?>" title="<?php echo __("Edit")?>"></i>
+                                                                <div class="col-sm-7">
+                                                                        <span class="edit-action edit-fields"
+                                                                              data-id="gateway_<?php echo $method['id']; ?>"
+                                                                              data-role="edit">
+                                                                            <i class="fa fa-pencil display_tooltip editdetail"
+                                                                               title="<?php echo __js("Edit"); ?>"
+                                                                               data-id="<?php echo $method['id']; ?>"
+                                                                               data-value_id="<?php echo $value_id; ?>"
+                                                                               alt="<?php echo __("Edit") ?>"
+                                                                               title="<?php echo __("Edit") ?>"></i>
 
                                                                         </span>
-                                                                        <input type="text" name="<?php echo $fields->getId();?>" id="fieldval" value="<?php echo $jsondata[$fields->getId()];?>" is_form_horizontal="1" color="color-blue" class="sb-input-username input-flat bank-field" required>
-                                                                        <span class="cancel-fields remove-fields" rel="<?php echo $fields->getId();?>">
+                                                                    <input type="text"
+                                                                           name="<?php echo $fields->getId(); ?>"
+                                                                           id="fieldval"
+                                                                           value="<?php echo $jsondata[$fields->getId()]; ?>"
+                                                                           is_form_horizontal="1" color="color-blue"
+                                                                           class="sb-input-username input-flat bank-field"
+                                                                           required>
+                                                                    <span class="cancel-fields remove-fields"
+                                                                          rel="<?php echo $fields->getId(); ?>">
                                                                             <i class="fa fa-times"></i>
                                                                         </span>
 
-                                                                    </div>
-                                                                    <div class="sb-cb"></div>
                                                                 </div>
-                                                                <?php 
-                                                            endif;
-                                                        endforeach;?>
-                                                        <div class="new-field-add"></div>
-                                                        <input type="hidden" name="gid" value="<?php echo  $method['id'];?>" is_form_horizontal="1" color="color-blue" id="gid">
-                                                        <input type="hidden" name="value_id" value="<?php echo $value_id;?>" is_form_horizontal="1" color="color-blue" id="value_id">
-                                                        <fieldset id="fieldset-gatewaysaveeditnav" class="sb-nav">
-                                                            <dl>
-                                                                <div class="sb-save-info-button">
-                                                                    <span class="btn pull-left default_button color-blue new-field-insert"  color="color-blue"  data-role="edit">
-                                                                        <?php echo __('Additional Field');?> <i class="fa fa-plus"></i>
+                                                                <div class="sb-cb"></div>
+                                                            </div>
+                                                        <?php
+                                                        endif;
+                                                    endforeach; ?>
+                                                    <div class="new-field-add"></div>
+                                                    <input type="hidden" name="gid" value="<?php echo $method['id']; ?>"
+                                                           is_form_horizontal="1" color="color-blue" id="gid">
+                                                    <input type="hidden" name="value_id"
+                                                           value="<?php echo $value_id; ?>" is_form_horizontal="1"
+                                                           color="color-blue" id="value_id">
+                                                    <fieldset id="fieldset-gatewaysaveeditnav" class="sb-nav">
+                                                        <dl>
+                                                            <div class="sb-save-info-button">
+                                                                    <span class="btn pull-left default_button color-blue new-field-insert"
+                                                                          color="color-blue" data-role="edit">
+                                                                        <?php echo __('Additional Field'); ?> <i
+                                                                                class="fa fa-plus"></i>
                                                                     </span>
-                                                                    <button type="submit" name="Save" id="Save" is_form_horizontal="1" color="color-blue" class="btn pull-right default_button color-blue" data-loading-text="Patientez ..."><?php echo __('Save');?></button>
-                                                                </div>
-                                                            </dl>
-                                                        </fieldset>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+                                                                <button type="submit" name="Save" id="Save"
+                                                                        is_form_horizontal="1" color="color-blue"
+                                                                        class="btn pull-right default_button color-blue"
+                                                                        data-loading-text="Patientez ..."><?php echo __('Save'); ?></button>
+                                                            </div>
+                                                        </dl>
+                                                    </fieldset>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -189,282 +250,341 @@ $counter_of_fields = $length_of_fields + 1;
         <div role="tabpanel" class="tab-pane" id="premimum_tag">
             <h3 class="title-editor no-border-radius title-feature-indent">
                 <?php echo $this->_('Premimum Payment'); ?>
-                <button type="button" class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items" data-toggle="existing-items">
+                <button type="button"
+                        class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items"
+                        data-toggle="existing-items">
                     <i class="fa fa-chevron-down"></i>
                 </button>
             </h3>
             <div id="existing-items" class="container-fluid first-row-feature  feature-manage-items">
 
-                
-                <table  width="100%" class="table content-white-bkg payment-table" id="payment-table">
+
+                <table width="100%" class="table content-white-bkg payment-table" id="payment-table">
                     <thead>
-                        <tr class="border-blue">
-                            <th><?php echo __("Method"); ?></th>
-                            <th><?php echo __("Status"); ?></th>
-                            <th></th>
-                        </tr>
+                    <tr class="border-blue">
+                        <th><?php echo __("Method"); ?></th>
+                        <th><?php echo __("Status"); ?></th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($premimummethodsArray as $method): ?>
+                    <?php foreach ($premimummethodsArray as $method): ?>
 
-                            <tr id="gateway_element_<?php echo $method['id']; ?>" class="gateway-manage-element sb-pager" class="gateway-manage-element sb-pager">
-                                <td><?php echo $method['name']?></td>
-                                
-                                <td class="edit-action open-edit">
-                                    <input class="sb-tgl sb-tgl-flip gateway_on_off" id="gateway_on_off_<?php echo $method['id']; ?>" value="off"  rel="<?php echo $method['id']; ?>" <?php echo ($method['status'] == 1) ? "checked=\"checked\"" : ""; ?> value_id="<?php echo $value_id;?>" type="checkbox">
-                                    <label class="sb-tgl-btn" for="gateway_on_off_<?php echo $method['id']; ?>" data-tg-off="<?php echo __("Off"); ?>" data-tg-on="<?php echo __("On"); ?>"></label>                                
-                                </td>
+                        <tr id="gateway_element_<?php echo $method['id']; ?>" class="gateway-manage-element sb-pager"
+                            class="gateway-manage-element sb-pager">
+                            <td><?php echo $method['name'] ?></td>
 
-                                <td>
-                                    <?php if ($method['code'] == 'payu_latam') : ?>
+                            <td class="edit-action open-edit">
+                                <input class="sb-tgl sb-tgl-flip gateway_on_off"
+                                       id="gateway_on_off_<?php echo $method['id']; ?>" value="off"
+                                       rel="<?php echo $method['id']; ?>" <?php echo ($method['status'] == 1) ? "checked=\"checked\"" : ""; ?>
+                                       value_id="<?php echo $value_id; ?>" type="checkbox">
+                                <label class="sb-tgl-btn" for="gateway_on_off_<?php echo $method['id']; ?>"
+                                       data-tg-off="<?php echo __("Off"); ?>"
+                                       data-tg-on="<?php echo __("On"); ?>"></label>
+                            </td>
 
-                                        <span class="edit-action open-edit" data-form-url="<?php echo __path("/enterprisepayment/application/loadpremiumgatewayform", ["gid" => $method['id'], "value_id" => $value_id]); ?>" data-id="gateway_<?php echo $method['id']; ?>" data-role="edit">
-                                            <i class="fa fa-pencil display_tooltip editpremiumform" title="<?php echo __js("Edit"); ?>" data-id="<?php echo $method['id']; ?>" data-value_id="<?php echo $value_id; ?>" alt="<?php echo __("Edit")?>" title="<?php echo __("Edit")?>"></i>
+                            <td>
+                                <?php if ($method['code'] == 'payu_latam') : ?>
+
+                                    <span class="edit-action open-edit"
+                                          data-form-url="<?php echo __path("/enterprisepayment/application/loadpremiumgatewayform", ["gid" => $method['id'], "value_id" => $value_id]); ?>"
+                                          data-id="gateway_<?php echo $method['id']; ?>" data-role="edit">
+                                            <i class="fa fa-pencil display_tooltip editpremiumform"
+                                               title="<?php echo __js("Edit"); ?>"
+                                               data-id="<?php echo $method['id']; ?>"
+                                               data-value_id="<?php echo $value_id; ?>" alt="<?php echo __("Edit") ?>"
+                                               title="<?php echo __("Edit") ?>"></i>
                                             
                                         </span>
-                                        <table>
-                                            <tr class="edit-form" id="detail_<?php echo $method['id']; ?>" data-id="gateway_<?php echo $method['id']; ?>"  style="display: none;">
-                                                <td colspan="7">
-                                                    <p class="close-edit" data-clear="true" data-id="gateway<?php echo $method['id']; ?>">
-                                                        <i class="fa fa-times"></i><?php echo __("Close") ?>
-                                                    </p>
-                                                </td>
+                                    <table>
+                                        <tr class="edit-form" id="detail_<?php echo $method['id']; ?>"
+                                            data-id="gateway_<?php echo $method['id']; ?>" style="display: none;">
+                                            <td colspan="7">
+                                                <p class="close-edit" data-clear="true"
+                                                   data-id="gateway<?php echo $method['id']; ?>">
+                                                    <i class="fa fa-times"></i><?php echo __("Close") ?>
+                                                </p>
+                                            </td>
 
-                                            </tr>
-                                        </table>
-                                    <?php endif; ?>
-                                    
+                                        </tr>
+                                    </table>
+                                <?php endif; ?>
+
                             </td>
                         </tr>
-                        <?php endforeach; ?>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
-    <div role="tabpanel" class="tab-pane" id="transaction_tag">
-        <h3 class="title-editor no-border-radius title-feature-indent">
-            <?php echo $this->_('Transaction Details'); ?>
-            <button type="button" class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items" data-toggle="existing-items">
-                <i class="fa fa-chevron-down"></i>
-            </button>
-        </h3>
-        <div id="existing-items" class="container-fluid first-row-feature  feature-manage-items">
+        <div role="tabpanel" class="tab-pane" id="transaction_tag">
+            <h3 class="title-editor no-border-radius title-feature-indent">
+                <?php echo $this->_('Transaction Details'); ?>
+                <button type="button"
+                        class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items"
+                        data-toggle="existing-items">
+                    <i class="fa fa-chevron-down"></i>
+                </button>
+            </h3>
+            <div id="existing-items" class="container-fluid first-row-feature  feature-manage-items">
 
-            <!-- Transaction details -->
-            <table class="table content-white-bkg sb-pager" id="transactionTable">
-                <thead>
+                <!-- Transaction details -->
+                <table class="table content-white-bkg sb-pager" id="transactionTable">
+                    <thead>
                     <tr class="border-blue">
                         <th class="sortable" style="width:28%;"><?php echo __("Customer Name"); ?></th>
-                        <th ><?php echo __("Amount"); ?></th>
+                        <th><?php echo __("Amount"); ?></th>
                         <th><?php echo __("Gateway Type"); ?></th>
                         <th><?php echo __("Transaction Date"); ?></th>
                         <th><?php echo __("Status"); ?></th>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($gettransaction as $value):?>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($gettransaction as $value): ?>
 
                         <tr>
-                            <td><?php 
-                            $customerdata = $customersmodel->findAll(array('customer_id' => $value['customer_id']));
-                            foreach ($customerdata as $value_data) {
-                                echo $value_data->getFirstname().' '.$value_data->getLastname();
-                            }
-                            ?>
-                        </td>
-                        <td><?php echo $value['amount'].$currency;?></td>
-                        <td>
-                            <?php
-                            $gatewaysmodeldata = $gatewaysmodel->find(array('id' => $value['type']));
+                            <td><?php
+                                $customerdata = $customersmodel->findAll(['customer_id' => $value['customer_id']]);
+                                foreach ($customerdata as $value_data) {
+                                    echo $value_data->getFirstname() . ' ' . $value_data->getLastname();
+                                }
+                                ?>
+                            </td>
+                            <td><?php echo $value['amount'] . $currency; ?></td>
+                            <td>
+                                <?php
+                                $gatewaysmodeldata = $gatewaysmodel->find(['id' => $value['type']]);
 
-                            echo $payment_code = $gatewaysmodeldata->getName();?>
-                        </td>
-                        <td><?php echo $value['transaction_date'];?></td>
-                        <td>
-                            <?php if($value['status'] == 1){
-                                echo __("Success");
-                            }else if($value['status'] == 0){
-                                echo __("Fail");
-                            }else if($value['status'] == 2){
-                                echo __("Pending");
-                            }?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Setting tab container -->
-<div role="tabpanel" class="tab-pane" id="setting_tab">
-    <div class="container-fluid">
-        <div class="feature-block-add">
-            <h3 class="title-editor no-border-radius title-feature-indent">
-                <?php echo $this->_('Return url'); ?>
-                <button type="button" class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items" data-toggle="existing-items">
-                    <i class="fa fa-chevron-down"></i>
-                </button>
-            </h3>
-
-            <div id="existing-items" class="container-fluid first-row-feature  feature-manage-items">
-                <form id="form-gateway"  method="post" class="form sb-form feature-form form-horizontal create" action="/enterprisepayment/application/settingdetail">
-
-                <input type="hidden" name="value_id" value="<?php echo $value_id;?>">
-
-               
-
-
-                <?php if(count($get_all_setting_link) == 0):?>   
-                 <input type="hidden" name="total_url_fields" id="total_url_fields" class="total_url_fields" value="1"> 
-                    <div class="form-group sb-form-line " id="control-group_return_link">
-                        <label for="return_link" class="sb-form-line-title col-md-3 optional"><?php echo __('Link');?></label>
-                           <div class=" col-md-7">
-                              <select name="return_link_0" relcounter="0" id="return_link_0" is_form_horizontal="1" color="color-blue" label_cols="col-md-3" input_cols="col-md-7" offset_cols="col-md-offset-3" error_cols="col-md-7" class="sb-select styled-select color-blue form-control no-dk return_link return_link_url">
-                                 <!-- <option value="-1">No link</option>
-                                 <option value="external_link">External Links</option> -->
-                              </select>
-                           </div>
-                           <div class="sb-cb"></div>
-                    </div>
-
-                    <div class="add_url_fields_0"></div>
-
-
-                    <div class="form-group sb-form-line ">
-                       <div class="">
-                          <div name="manage_div" id="manage_div" is_form_horizontal="1" color="color-blue" class="sb-form-html">
-                             <div class="">
-                                <div class="col-sm-3 no-pad">
-                                </div>
-                                <div class="col-sm-7 ornote" style="text-align: center;">
-                                   <p><?php echo __('OR');?></p>
-                                </div>
-                             </div>
-                          </div>
-                       </div>
-                    </div>
-
-                    <div class="form-group sb-form-line">
-                        <label for="return_state_0" class="sb-form-line-title col-sm-3 optional"><?php echo __('State Name');?></label>
-                        <div class="col-sm-7">
-                          <input type="text" name="return_state_0" id="return_state_0" value="" is_form_horizontal="1" color="color-blue" class="sb-input-return_state input-flat return_state">
-                        </div>
-                        <div class="sb-cb"></div>
-                    </div>
-
-                    <div class="form-group sb-form-line">
-                       <label for="return_value_id_0" class="sb-form-line-title col-sm-3 optional"><?php echo __('Return value id');?></label>
-                       <div class="col-sm-7">
-                          <input type="text" name="return_value_id_0" id="return_value_id_0" value="" is_form_horizontal="1" color="color-blue" class="sb-input-return_value_id input-flat return_value_id_0">
-                       </div>
-                       <div class="sb-cb"></div>
-                    </div>
-
-                    
-                <?php endif;?>
-                    
-                <?php 
-                    $counter=0;
-                    if(count($get_all_setting_link) != 0):
-                    foreach($get_all_setting_link as $get_all_setting_data):
-                       
-                ?>
-                    <input type="hidden" name="total_url_fields" id="total_url_fields" class="total_url_fields" value="<?php echo count($get_all_setting_link);?>">
-                    <input type="hidden" name="id_<?php echo $counter;?>" value="<?php echo $get_all_setting_data['id'];?>">
-                    <div class="form-group sb-form-line " id="control-group_return_link">
-                        <label for="return_link_<?php echo $counter;?>" class="sb-form-line-title col-md-3 optional"><?php echo __('Link');?></label>
-                           <div class=" col-md-7">
-                              <select name="return_link_<?php echo $counter;?>" id="return_link_<?php echo $counter;?>" is_form_horizontal="1" relcounter="<?php echo $counter;?>" color="color-blue" label_cols="col-md-3" input_cols="col-md-7" offset_cols="col-md-offset-3" error_cols="col-md-7" class="sb-select styled-select color-blue form-control no-dk return_link return_link_url" >
-                              </select>
-                           </div>
-                           <div class="sb-cb"></div>
-                    </div>
-
-                    <?php if($get_all_setting_data['return_link'] != '-1' ):
-                        if(!empty($get_all_setting_data['return_link'])):
-                        ?>
-                        <div class="form-group sb-form-line hide_current_url_<?php echo $counter;?>">
-                            <label for="return_link_<?php echo $counter;?>" class="sb-form-line-title col-sm-3 optional"><?php echo __('URL');?></label>
-                            <div class="col-sm-7">
-                              <input type="text" name="return_link_<?php echo $counter;?>" id="return_link_<?php echo $counter;?>" value="<?php echo $get_all_setting_data['return_link']?>" is_form_horizontal="1" color="color-blue" class="sb-input-return_state input-flat return_link">
-                            </div>
-                            <div class="sb-cb"></div>
-                        </div>
-
-                    <?php endif; endif;?>
-
-                    <div class="add_url_fields_<?php echo $counter;?>"></div>
-
-
-                    <div class="form-group sb-form-line ">
-                       <div class="">
-                          <div name="manage_div" id="manage_div" is_form_horizontal="1" color="color-blue" class="sb-form-html">
-                             <div class="form-group sb-form-line">
-                                <div class="col-sm-3 no-pad">
-                                </div>
-                                <div class="col-sm-7 ornote" style="text-align: center;">
-                                   <p>OR</p>
-                                </div>
-                             </div>
-                          </div>
-                       </div>
-                    </div>
-
-                    <div class="form-group sb-form-line">
-                        <label for="return_state_<?php echo $counter;?>" class="sb-form-line-title col-sm-3 optional"><?php echo __('State Name');?></label>
-                        <div class="col-sm-7">
-                          <input type="text" name="return_state_<?php echo $counter;?>" id="return_state_<?php echo $counter;?>" value="<?php echo $get_all_setting_data['return_state'];?>" is_form_horizontal="1" color="color-blue" class="sb-input-return_state input-flat return_state">
-                        </div>
-                        <div class="sb-cb"></div>
-                    </div>
-
-                    <div class="form-group sb-form-line">
-                       <label for="return_value_id" class="sb-form-line-title col-sm-3 optional"><?php echo __('Return value id');?></label>
-                       <div class="col-sm-7">
-                          <input type="text" name="return_value_id_<?php echo $counter;?>" id="return_value_id_<?php echo $counter;?>" value="<?php echo $get_all_setting_data['return_value_id'];?>" is_form_horizontal="1" color="color-blue" class="sb-input-return_value_id input-flat return_value_id">
-                       </div>
-                       <div class="sb-cb"></div>
-                    </div>
-
-                <?php $counter++;endforeach;endif;?>
-
-                    <div class="more-field-link-add"></div>
-                
-
-                    <fieldset id="add-more-payment-field-button" class="sb-nav">
-                       <dl>
-                          <div class="sb-save-info-button">
-                             <span class="btn pull-left default_button color-blue new-more-field-insert" color="color-blue" data-role="edit">
-                             <?php echo __('Add More');?> <i class="fa fa-plus"></i>
-                             </span>
-                             
-                          </div>
-                       </dl>
-                    </fieldset>
-
-                    <fieldset id="fieldset-formtestnav" class="sb-nav">
-                       <dl>
-                          <div class="sb-save-info-button">
-                             <button type="submit" name="OK" id="OK" is_form_horizontal="1" color="color-blue" class="btn pull-right default_button color-blue"><?php echo __('Save');?></button>
-                          </div>
-                       </dl>
-                    </fieldset>
-
-                </form>
+                                echo $payment_code = $gatewaysmodeldata->getName(); ?>
+                            </td>
+                            <td><?php echo $value['transaction_date']; ?></td>
+                            <td>
+                                <?php if ($value['status'] == 1) {
+                                    echo __("Success");
+                                } else if ($value['status'] == 0) {
+                                    echo __("Fail");
+                                } else if ($value['status'] == 2) {
+                                    echo __("Pending");
+                                } ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
-            
         </div>
 
+        <!-- Setting tab container -->
+        <div role="tabpanel" class="tab-pane" id="setting_tab">
+            <div class="container-fluid">
+                <div class="feature-block-add">
+                    <h3 class="title-editor no-border-radius title-feature-indent">
+                        <?php echo $this->_('Return url'); ?>
+                        <button type="button"
+                                class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items"
+                                data-toggle="existing-items">
+                            <i class="fa fa-chevron-down"></i>
+                        </button>
+                    </h3>
+
+                    <div id="existing-items" class="container-fluid first-row-feature  feature-manage-items">
+                        <form id="form-gateway" method="post" class="form sb-form feature-form form-horizontal create"
+                              action="/enterprisepayment/application/settingdetail">
+
+                            <input type="hidden" name="value_id" value="<?php echo $value_id; ?>">
+
+
+                            <?php if (count($get_all_setting_link) == 0): ?>
+                                <input type="hidden" name="total_url_fields" id="total_url_fields"
+                                       class="total_url_fields" value="1">
+                                <div class="form-group sb-form-line " id="control-group_return_link">
+                                    <label for="return_link"
+                                           class="sb-form-line-title col-md-3 optional"><?php echo __('Link'); ?></label>
+                                    <div class=" col-md-7">
+                                        <select name="return_link_0" relcounter="0" id="return_link_0"
+                                                is_form_horizontal="1" color="color-blue" label_cols="col-md-3"
+                                                input_cols="col-md-7" offset_cols="col-md-offset-3"
+                                                error_cols="col-md-7"
+                                                class="sb-select styled-select color-blue form-control no-dk return_link return_link_url">
+                                            <!-- <option value="-1">No link</option>
+                                            <option value="external_link">External Links</option> -->
+                                        </select>
+                                    </div>
+                                    <div class="sb-cb"></div>
+                                </div>
+
+                                <div class="add_url_fields_0"></div>
+
+
+                                <div class="form-group sb-form-line ">
+                                    <div class="">
+                                        <div name="manage_div" id="manage_div" is_form_horizontal="1" color="color-blue"
+                                             class="sb-form-html">
+                                            <div class="">
+                                                <div class="col-sm-3 no-pad">
+                                                </div>
+                                                <div class="col-sm-7 ornote" style="text-align: center;">
+                                                    <p><?php echo __('OR'); ?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group sb-form-line">
+                                    <label for="return_state_0"
+                                           class="sb-form-line-title col-sm-3 optional"><?php echo __('State Name'); ?></label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="return_state_0" id="return_state_0" value=""
+                                               is_form_horizontal="1" color="color-blue"
+                                               class="sb-input-return_state input-flat return_state">
+                                    </div>
+                                    <div class="sb-cb"></div>
+                                </div>
+
+                                <div class="form-group sb-form-line">
+                                    <label for="return_value_id_0"
+                                           class="sb-form-line-title col-sm-3 optional"><?php echo __('Return value id'); ?></label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="return_value_id_0" id="return_value_id_0" value=""
+                                               is_form_horizontal="1" color="color-blue"
+                                               class="sb-input-return_value_id input-flat return_value_id_0">
+                                    </div>
+                                    <div class="sb-cb"></div>
+                                </div>
+
+
+                            <?php endif; ?>
+
+                            <?php
+                            $counter = 0;
+                            if (count($get_all_setting_link) != 0):
+                                foreach ($get_all_setting_link as $get_all_setting_data):
+
+                                    ?>
+                                    <input type="hidden" name="total_url_fields" id="total_url_fields"
+                                           class="total_url_fields" value="<?php echo count($get_all_setting_link); ?>">
+                                    <input type="hidden" name="id_<?php echo $counter; ?>"
+                                           value="<?php echo $get_all_setting_data['id']; ?>">
+                                    <div class="form-group sb-form-line " id="control-group_return_link">
+                                        <label for="return_link_<?php echo $counter; ?>"
+                                               class="sb-form-line-title col-md-3 optional"><?php echo __('Link'); ?></label>
+                                        <div class=" col-md-7">
+                                            <select name="return_link_<?php echo $counter; ?>"
+                                                    id="return_link_<?php echo $counter; ?>" is_form_horizontal="1"
+                                                    relcounter="<?php echo $counter; ?>" color="color-blue"
+                                                    label_cols="col-md-3" input_cols="col-md-7"
+                                                    offset_cols="col-md-offset-3" error_cols="col-md-7"
+                                                    class="sb-select styled-select color-blue form-control no-dk return_link return_link_url">
+                                            </select>
+                                        </div>
+                                        <div class="sb-cb"></div>
+                                    </div>
+
+                                    <?php if ($get_all_setting_data['return_link'] != '-1'):
+                                    if (!empty($get_all_setting_data['return_link'])):
+                                        ?>
+                                        <div class="form-group sb-form-line hide_current_url_<?php echo $counter; ?>">
+                                            <label for="return_link_<?php echo $counter; ?>"
+                                                   class="sb-form-line-title col-sm-3 optional"><?php echo __('URL'); ?></label>
+                                            <div class="col-sm-7">
+                                                <input type="text" name="return_link_<?php echo $counter; ?>"
+                                                       id="return_link_<?php echo $counter; ?>"
+                                                       value="<?php echo $get_all_setting_data['return_link'] ?>"
+                                                       is_form_horizontal="1" color="color-blue"
+                                                       class="sb-input-return_state input-flat return_link">
+                                            </div>
+                                            <div class="sb-cb"></div>
+                                        </div>
+
+                                    <?php endif; endif; ?>
+
+                                    <div class="add_url_fields_<?php echo $counter; ?>"></div>
+
+
+                                    <div class="form-group sb-form-line ">
+                                        <div class="">
+                                            <div name="manage_div" id="manage_div" is_form_horizontal="1"
+                                                 color="color-blue" class="sb-form-html">
+                                                <div class="form-group sb-form-line">
+                                                    <div class="col-sm-3 no-pad">
+                                                    </div>
+                                                    <div class="col-sm-7 ornote" style="text-align: center;">
+                                                        <p>OR</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group sb-form-line">
+                                        <label for="return_state_<?php echo $counter; ?>"
+                                               class="sb-form-line-title col-sm-3 optional"><?php echo __('State Name'); ?></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" name="return_state_<?php echo $counter; ?>"
+                                                   id="return_state_<?php echo $counter; ?>"
+                                                   value="<?php echo $get_all_setting_data['return_state']; ?>"
+                                                   is_form_horizontal="1" color="color-blue"
+                                                   class="sb-input-return_state input-flat return_state">
+                                        </div>
+                                        <div class="sb-cb"></div>
+                                    </div>
+
+                                    <div class="form-group sb-form-line">
+                                        <label for="return_value_id"
+                                               class="sb-form-line-title col-sm-3 optional"><?php echo __('Return value id'); ?></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" name="return_value_id_<?php echo $counter; ?>"
+                                                   id="return_value_id_<?php echo $counter; ?>"
+                                                   value="<?php echo $get_all_setting_data['return_value_id']; ?>"
+                                                   is_form_horizontal="1" color="color-blue"
+                                                   class="sb-input-return_value_id input-flat return_value_id">
+                                        </div>
+                                        <div class="sb-cb"></div>
+                                    </div>
+
+                                    <?php $counter++;endforeach;endif; ?>
+
+                            <div class="more-field-link-add"></div>
+
+
+                            <fieldset id="add-more-payment-field-button" class="sb-nav">
+                                <dl>
+                                    <div class="sb-save-info-button">
+                             <span class="btn pull-left default_button color-blue new-more-field-insert"
+                                   color="color-blue" data-role="edit">
+                             <?php echo __('Add More'); ?> <i class="fa fa-plus"></i>
+                             </span>
+
+                                    </div>
+                                </dl>
+                            </fieldset>
+
+                            <fieldset id="fieldset-formtestnav" class="sb-nav">
+                                <dl>
+                                    <div class="sb-save-info-button">
+                                        <button type="submit" name="OK" id="OK" is_form_horizontal="1"
+                                                color="color-blue"
+                                                class="btn pull-right default_button color-blue"><?php echo __('Save'); ?></button>
+                                    </div>
+                                </dl>
+                            </fieldset>
+
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
     </div>
-</div>
-</div>
 </div>
 
 <script type="text/javascript">
 
     bindForms("#transaction_tag");
-    $(document).ready(function() {
+    $(document).ready(function () {
         bindForms("#enterprisepayment");
     });
 
@@ -475,56 +595,56 @@ $counter_of_fields = $length_of_fields + 1;
     var bTable = $('#transactionTable').DataTable({
         "bFilter": true,
         "aoColumnDefs": [
-        { orderable: false, targets: [0,1,2,3,4] }
+            {orderable: false, targets: [0, 1, 2, 3, 4]}
         ],
-        'sDom' : '<"#add">frtip',
+        'sDom': '<"#add">frtip',
         'responsive': true,
-        
+
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.payment-table').DataTable({
-            "columns":[
-            {
-                "sortable": true
-            },
-            {
-                "sortable": false
-            },
-            {
-                "sortable": false
-            },
+            "columns": [
+                {
+                    "sortable": true
+                },
+                {
+                    "sortable": false
+                },
+                {
+                    "sortable": false
+                },
 
             ]
         });
         var json_data_setting = '<?php echo $json_data_setting; ?>';
         var json_data_setting_array = JSON.parse(json_data_setting);
-        var data = { value_id: <?php echo $value_id;?> };
-            $.ajax({
-                method: "GET",
-                url : "<?php echo $this->getUrl('enterprisepayment/application/getpages'); ?>"              
-            }).then(function( data ) {
-                $('.return_link_url').html('');
-                $('.return_link_url').append($('<option>', {value:'-1',text:'<?php echo __('No link');?>'}));
-                $('.return_link_url').append($('<option>', {value: '',text:'<?php echo __('External Links');?>'}));
-                $.each(JSON.parse(data), function( k, v ) {
-                    $('.return_link_url').append($('<option>', {
-                        value: k,
-                        text: v
-                    }));
-                    //if(json_data_setting_array > 0) {
-                        for (var i = 0; i < json_data_setting_array.length; i++) {
-                            $('#return_link_'+i).val(json_data_setting_array[i].return_url);
+        var data = {value_id: <?php echo $value_id;?> };
+        $.ajax({
+            method: "GET",
+            url: "<?php echo $this->getUrl('enterprisepayment/application/getpages'); ?>"
+        }).then(function (data) {
+            $('.return_link_url').html('');
+            $('.return_link_url').append($('<option>', {value: '-1', text: '<?php echo __('No link');?>'}));
+            $('.return_link_url').append($('<option>', {value: '', text: '<?php echo __('External Links');?>'}));
+            $.each(JSON.parse(data), function (k, v) {
+                $('.return_link_url').append($('<option>', {
+                    value: k,
+                    text: v
+                }));
+                //if(json_data_setting_array > 0) {
+                for (var i = 0; i < json_data_setting_array.length; i++) {
+                    $('#return_link_' + i).val(json_data_setting_array[i].return_url);
 
-                        }
-                    //}
-                    
-                });
-                
+                }
+                //}
+
             });
+
+        });
     });
-    
-    $('.editdetail').on("click", function(){
+
+    $('.editdetail').on("click", function () {
         var This = $(this);
         $('#sandboxusername').parent().parent().hide();
         $('#sandboxpassword').parent().parent().hide();
@@ -545,25 +665,26 @@ $counter_of_fields = $length_of_fields + 1;
             url: post_url,
             data: data,
             dataType: "json",
-            success: function(data) {
-                setTimeout(function(){
-                 if (data.success) {
-                    if (data.data.length == 0) {
-                        formsandboxcondition();
-                    } else if (data.data.payment_mode == 0) {
-                        formsandboxcondition();
-                    } else if (data.data.payment_mode == 1) {
-                        formlivecondition();
+            success: function (data) {
+                setTimeout(function () {
+                    if (data.success) {
+                        if (data.data.length == 0) {
+                            formsandboxcondition();
+                        } else if (data.data.payment_mode == 0) {
+                            formsandboxcondition();
+                        } else if (data.data.payment_mode == 1) {
+                            formlivecondition();
+                        }
                     }
-                }
-            }, 500);
-                
+                }, 500);
+
             },
-            error: function() {
+            error: function () {
                 feature_form_error("An error occured, please try again.");
             }
         });
-        function formlivecondition(){
+
+        function formlivecondition() {
             $('#sandboxusername').parent().parent().hide();
             $('#sandboxpassword').parent().parent().hide();
             $('#sandboxsignature').parent().parent().hide();
@@ -572,7 +693,7 @@ $counter_of_fields = $length_of_fields + 1;
             $('#signature').parent().parent().show();
         }
 
-        function formsandboxcondition(){
+        function formsandboxcondition() {
             $('#sandboxusername').parent().parent().show();
             $('#sandboxpassword').parent().parent().show();
             $('#sandboxsignature').parent().parent().show();
@@ -581,7 +702,7 @@ $counter_of_fields = $length_of_fields + 1;
             $('#signature').parent().parent().hide();
         }
 
-        $(document).on("change", '.select_payment_paypal', function(){
+        $(document).on("change", '.select_payment_paypal', function () {
             if (this.value == 1) {
                 formlivecondition();
             } else {
@@ -590,8 +711,8 @@ $counter_of_fields = $length_of_fields + 1;
         });
     });
 
-    
-    $('.editdetail2').on("click", function(){
+
+    $('.editdetail2').on("click", function () {
         var This = $(this);
         var id = This.data('id');
         var value_id = This.data('value_id');
@@ -605,8 +726,8 @@ $counter_of_fields = $length_of_fields + 1;
             url: post_url,
             data: data,
             dataType: "json",
-            success: function(data) {
-                setTimeout(function(){
+            success: function (data) {
+                setTimeout(function () {
                     if (data.data.length == 0) {
                         stripetestcondition();
                     } else if (data.data.payment_mode == 0) {
@@ -615,21 +736,21 @@ $counter_of_fields = $length_of_fields + 1;
                         stripelivecondition();
                     }
                 }, 500);
-                
+
             },
-            error: function() {
+            error: function () {
                 feature_form_error("An error occured, please try again.");
             }
         });
 
-        function stripelivecondition(){
+        function stripelivecondition() {
             $('#test_publishkey').parent().parent().hide();
             $('#test_secrete_key').parent().parent().hide();
             $('#live_publishkey').parent().parent().show();
             $('#live_secrete_key').parent().parent().show();
         }
 
-        function stripetestcondition(){
+        function stripetestcondition() {
             $('#test_publishkey').parent().parent().show();
             $('#test_secrete_key').parent().parent().show();
             $('#live_publishkey').parent().parent().hide();
@@ -637,7 +758,7 @@ $counter_of_fields = $length_of_fields + 1;
         }
 
 
-        $(document).on("change", '.select_stripe_paypal', function(){
+        $(document).on("change", '.select_stripe_paypal', function () {
             if (this.value == 1) {
                 stripelivecondition();
             } else {
@@ -647,7 +768,7 @@ $counter_of_fields = $length_of_fields + 1;
     });
 
 
-    $(document).on("click", '.editpremiumform', function(){
+    $(document).on("click", '.editpremiumform', function () {
         var This = $(this);
         var id = This.data('id');
         var value_id = This.data('value_id');
@@ -661,8 +782,8 @@ $counter_of_fields = $length_of_fields + 1;
             url: post_url,
             data: data,
             dataType: "json",
-            success: function(data) {
-                setTimeout(function(){
+            success: function (data) {
+                setTimeout(function () {
                     if (data.data.length == 0) {
                         premiumtestcondition();
                     } else if (data.data.payment_mode == 0) {
@@ -671,13 +792,14 @@ $counter_of_fields = $length_of_fields + 1;
                         premiumlivecondition();
                     }
                 }, 500);
-                
+
             },
-            error: function() {
+            error: function () {
                 feature_form_error("An error occured, please try again.");
             }
         });
-        function premiumlivecondition(){
+
+        function premiumlivecondition() {
             $('#live_payulatam_app_id').parent().parent().show();
             $('#live_payulatam_public_key').parent().parent().show();
             $('#live_payulatam_private_key').parent().parent().show();
@@ -686,8 +808,8 @@ $counter_of_fields = $length_of_fields + 1;
             $('#test_payulatam_private_key').parent().parent().hide();
         }
 
-        function premiumtestcondition(){
-            setTimeout(function(){
+        function premiumtestcondition() {
+            setTimeout(function () {
                 $('#test_payulatam_app_id').parent().parent().show();
                 $('#test_payulatam_public_key').parent().parent().show();
                 $('#test_payulatam_private_key').parent().parent().show();
@@ -695,10 +817,10 @@ $counter_of_fields = $length_of_fields + 1;
                 $('#live_payulatam_public_key').parent().parent().hide();
                 $('#live_payulatam_private_key').parent().parent().hide();
             }, 500);
-            
+
         }
 
-        $(document).on("change", '.payulatam_payment_mode', function(){
+        $(document).on("change", '.payulatam_payment_mode', function () {
             if (this.value == 1) {
                 premiumlivecondition();
             } else {
@@ -709,12 +831,12 @@ $counter_of_fields = $length_of_fields + 1;
     });
 
 
-    $('.editdetail3').on("click", function(){
+    $('.editdetail3').on("click", function () {
         $("#bank_transfer_form").show();
     });
 
-    $("form#bank_transfer_form").submit(function(e) {
-        e.preventDefault(); 
+    $("form#bank_transfer_form").submit(function (e) {
+        e.preventDefault();
         var formData = new FormData(this);
         $.ajax({
             url: "<?php echo $this->getUrl('enterprisepayment/application/savebanktransferform') ?>",
@@ -723,9 +845,9 @@ $counter_of_fields = $length_of_fields + 1;
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                reload($('#enterprisepayment'), '<?php echo $this->getUrl('enterprisepayment/application/savebanktransferform') ?>', true, function(data) {
+                reload($('#enterprisepayment'), '<?php echo $this->getUrl('enterprisepayment/application/savebanktransferform') ?>', true, function (data) {
                     page.reload();
-                }); 
+                });
             },
             cache: false,
             contentType: false,
@@ -734,12 +856,12 @@ $counter_of_fields = $length_of_fields + 1;
     });
 
 
-    $('.gateway_on_off').change(function() {
+    $('.gateway_on_off').change(function () {
         page.reload();
         var onOff = (this.checked) ? 1 : 0;
         var rel = $(this).attr('rel');
         var value_id = '<?php echo $value_id;?>';
-        reload($(this), '<?php echo $this->getUrl('enterprisepayment/application/changegatewaystatus'); ?>/value_id/'+value_id+'/gid/'+rel+'/is_visible/'+onOff, true, function(datas) {
+        reload($(this), '<?php echo $this->getUrl('enterprisepayment/application/changegatewaystatus'); ?>/value_id/' + value_id + '/gid/' + rel + '/is_visible/' + onOff, true, function (datas) {
             page.reload();
         });
     });
@@ -771,13 +893,12 @@ $counter_of_fields = $length_of_fields + 1;
 */
 
 
-    
     function endEdit(e) {
         var input = $(e.target),
-        label = input && input.prev();
+            label = input && input.prev();
         var input_val = input.val();
         var input_id = $(this).attr('id');
-        editFields(input_val,input_id);
+        editFields(input_val, input_id);
         label.text(input.val() === '' ? defaultText : input.val());
         input.hide();
         label.show();
@@ -794,43 +915,43 @@ $counter_of_fields = $length_of_fields + 1;
         }
     });
 
-    $(".edit-fields").on("click", function(){
+    $(".edit-fields").on("click", function () {
         var parent = $(this).parents('.sb-form-line');
         parent.find('.field-label').hide();
         parent.find('.clickedit').show().focus();
     });
 
-    function editFields(input_val,input_id) {
+    function editFields(input_val, input_id) {
         $.ajax({
             type: "POST",
             url: '/enterprisepayment/application/editlabelfield',
-            data: { 
-                'field_name': input_val, 
+            data: {
+                'field_name': input_val,
                 'id': input_id
             },
             dataType: 'json',
-            success: function(dbdata){
+            success: function (dbdata) {
                 console.log(dbdata);
-                
+
             },
-            
+
         });
     }
 
     var counterdata = <?php echo $counter_of_fields;?>;
-    $(".new-field-insert").on("click", function(){
+    $(".new-field-insert").on("click", function () {
         $.ajax({
             type: "POST",
             url: '/enterprisepayment/application/addlabelfield',
-            data: { 
-                'field_name': 'Field '+counterdata,
-                'value_id' : <?php echo $value_id;?>
+            data: {
+                'field_name': 'Field ' + counterdata,
+                'value_id': <?php echo $value_id;?>
             },
             dataType: 'json',
-            success: function(data){
+            success: function (data) {
                 var field_id = data.field_id;
                 var field_name = data.field_name;
-                $('.new-field-add').append('<div class="form-group sb-form-line bank_transfer">'+'<div class="col-sm-3">'+'<label class="sb-form-line-title field-label">'+field_name+'</label>'+'<input name="'+field_id+'" class="sb-input-username input-flat pull-left clickedit" id="'+field_id+'" value="'+field_name+'" color="color-blue" is_form_horizontal="1" type="text" style="display: none;">'+'</div>'+'<div class="col-sm-7">'+'<span class="edit-action edit-fields-appends" data-id="gateway_683" data-role="edit">'+'<i class="fa fa-pencil display_tooltip editdetail" title="" data-id="683" data-value_id="<?php echo $value_id;?>" alt="Edit" data-original-title="Edit"></i>'+'</span>'+'<input type="text" name="'+field_id+'" id="fieldval" value="" is_form_horizontal="1" color="color-blue" class="sb-input-username input-flat bank-field" required="">'+'<span class="cancel-fields-appends remove-fields" rel="'+field_id+'">'+'<i class="fa fa-times"></i>'+'</span>'+'</div>'+'<div class="sb-cb"></div>'+'</div>');
+                $('.new-field-add').append('<div class="form-group sb-form-line bank_transfer">' + '<div class="col-sm-3">' + '<label class="sb-form-line-title field-label">' + field_name + '</label>' + '<input name="' + field_id + '" class="sb-input-username input-flat pull-left clickedit" id="' + field_id + '" value="' + field_name + '" color="color-blue" is_form_horizontal="1" type="text" style="display: none;">' + '</div>' + '<div class="col-sm-7">' + '<span class="edit-action edit-fields-appends" data-id="gateway_683" data-role="edit">' + '<i class="fa fa-pencil display_tooltip editdetail" title="" data-id="683" data-value_id="<?php echo $value_id;?>" alt="Edit" data-original-title="Edit"></i>' + '</span>' + '<input type="text" name="' + field_id + '" id="fieldval" value="" is_form_horizontal="1" color="color-blue" class="sb-input-username input-flat bank-field" required="">' + '<span class="cancel-fields-appends remove-fields" rel="' + field_id + '">' + '<i class="fa fa-times"></i>' + '</span>' + '</div>' + '<div class="sb-cb"></div>' + '</div>');
                 $('.clickedit').hide()
                 .focusout(endEdit)
                 .keyup(function (e) {
@@ -841,109 +962,110 @@ $counter_of_fields = $length_of_fields + 1;
                         return true;
                     }
                 });
-                $(".edit-fields-appends").on("click", function(){
+                $(".edit-fields-appends").on("click", function () {
                     var parent = $(this).parents('.sb-form-line');
                     parent.find('.field-label').hide();
                     parent.find('.clickedit').show().focus();
                 });
-                $(".cancel-fields-appends").on("click", function(){
+                $(".cancel-fields-appends").on("click", function () {
                     var rel = $(this).attr('rel');
-                    reload($(this), '<?php echo $this->getUrl('enterprisepayment/application/removefield'); ?>/id/'+rel+'/value_id/'+<?php echo $value_id;?>, true, function(datas) {
-                        if(datas.success) {
+                    reload($(this), '<?php echo $this->getUrl('enterprisepayment/application/removefield'); ?>/id/' + rel + '/value_id/' +<?php echo $value_id;?>, true, function (datas) {
+                        if (datas.success) {
                             console.log(datas);
                             page.reload();
                         }
                     });
                 });
             },
-            
+
         });
         counterdata++;
     });
 
     var count = parseInt($('.total_url_fields').val()) - 1;
-    
-    $(".new-more-field-insert").on("click", function(e){
-        e.preventDefault(); 
+
+    $(".new-more-field-insert").on("click", function (e) {
+        e.preventDefault();
         count += 1;
         console.log(count);
         console.log('5555555555555555555');
         $('.total_url_fields').val(count);
 
 
-        setTimeout(function(){
+        setTimeout(function () {
             $.ajax({
                 method: "GET",
-                url : "<?php echo $this->getUrl('enterprisepayment/application/getpages'); ?>"              
-            }).then(function( data ) {
-                $('.return_link_'+count).html('');
-                $('.return_link_'+count).append($('<option>', {value:'-1',text:'<?php echo __('No link');?>'}));
-                $('.return_link_'+count).append($('<option>', {value: '',text:'<?php echo __('External Links');?>'}));
-                $.each(JSON.parse(data), function( k, v ) {
-                    $('.return_link_'+count).append($('<option>', {
+                url: "<?php echo $this->getUrl('enterprisepayment/application/getpages'); ?>"
+            }).then(function (data) {
+                $('.return_link_' + count).html('');
+                $('.return_link_' + count).append($('<option>', {value: '-1', text: '<?php echo __('No link');?>'}));
+                $('.return_link_' + count).append($('<option>', {
+                    value: '',
+                    text: '<?php echo __('External Links');?>'
+                }));
+                $.each(JSON.parse(data), function (k, v) {
+                    $('.return_link_' + count).append($('<option>', {
                         value: k,
                         text: v
                     }));
-                }); 
-            },1000);
+                });
+            }, 1000);
 
         });
         $('.more-field-link-add').append(
-            '<div class="form-group sb-form-line">'+
-                '<label for="return_link" class="sb-form-line-title col-md-3 optional"><?php echo __("Link");?></label>'+
-            '<div class=" col-md-7">'+
-                '<select name="return_link" relcounter="'+count+'" id="return_link_'+count+'" is_form_horizontal="1" color="color-blue" label_cols="col-md-3" input_cols="col-md-7" offset_cols="col-md-offset-3" error_cols="col-md-7" class="sb-select styled-select color-blue form-control no-dk return_link_'+count+' return_link_url_state">'+
-                '</select>'+
-                '<input type="hidden" name="id_'+count+'" class="id_'+count+'" value="">'+
-            '</div>'+
-            '<div class="sb-cb"></div></div>'+
-            '<div class="add_url_fields_'+count+'"></div>'+
-            ' <div class="form-group sb-form-line ">'+
-                   
-                '<div name="manage_div" id="manage_div" is_form_horizontal="1" color="color-blue" class="sb-form-html">'+
-                     '<div class="">'+
-                        '<div class="col-sm-3 no-pad"></div>'+
-                        '<div class="col-sm-7 ornote" style="text-align: center;">'+
-                           '<p><?php echo __('OR');?></p>'+
-                        '</div>'+
-                     '</div>'+
-                  '</div>'+
-               '</div>'+
+            '<div class="form-group sb-form-line">' +
+            '<label for="return_link" class="sb-form-line-title col-md-3 optional"><?php echo __("Link");?></label>' +
+            '<div class=" col-md-7">' +
+            '<select name="return_link" relcounter="' + count + '" id="return_link_' + count + '" is_form_horizontal="1" color="color-blue" label_cols="col-md-3" input_cols="col-md-7" offset_cols="col-md-offset-3" error_cols="col-md-7" class="sb-select styled-select color-blue form-control no-dk return_link_' + count + ' return_link_url_state">' +
+            '</select>' +
+            '<input type="hidden" name="id_' + count + '" class="id_' + count + '" value="">' +
+            '</div>' +
+            '<div class="sb-cb"></div></div>' +
+            '<div class="add_url_fields_' + count + '"></div>' +
+            ' <div class="form-group sb-form-line ">' +
 
-                '<div class="form-group sb-form-line">'+
-                    '<label for="return_state_'+count+'" class="sb-form-line-title col-sm-3 optional"><?php echo __('State Name');?></label>'+
-                    '<div class="col-sm-7">'+
-                      '<input type="text" name="return_state_'+count+'" id="return_state_'+count+'" value="" is_form_horizontal="1" color="color-blue" class="sb-input-return_state input-flat return_state">'+
-                    '</div>'+
-                    '<div class="sb-cb"></div>'+
-                '</div>'+
+            '<div name="manage_div" id="manage_div" is_form_horizontal="1" color="color-blue" class="sb-form-html">' +
+            '<div class="">' +
+            '<div class="col-sm-3 no-pad"></div>' +
+            '<div class="col-sm-7 ornote" style="text-align: center;">' +
+            '<p><?php echo __('OR');?></p>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
 
-               
+            '<div class="form-group sb-form-line">' +
+            '<label for="return_state_' + count + '" class="sb-form-line-title col-sm-3 optional"><?php echo __('State Name');?></label>' +
+            '<div class="col-sm-7">' +
+            '<input type="text" name="return_state_' + count + '" id="return_state_' + count + '" value="" is_form_horizontal="1" color="color-blue" class="sb-input-return_state input-flat return_state">' +
+            '</div>' +
+            '<div class="sb-cb"></div>' +
+            '</div>' +
 
-                '<div class="form-group sb-form-line">'+
-                   '<label for="return_value_id_'+count+'" class="sb-form-line-title col-sm-3 optional"><?php echo __('Return value id');?></label>'+
-                   '<div class="col-sm-7">'+
-                      '<input type="text" name="return_value_id_'+count+'" id="return_value_id_'+count+'" value="" is_form_horizontal="1" color="color-blue" class="sb-input-return_value_id input-flat return_value_id_'+count+'">'+
-                   '</div>'+
-                   '<div class="sb-cb"></div>'+
-                '</div>'
-            );
 
-        $(".return_link_url_state").on("change", function(){
+            '<div class="form-group sb-form-line">' +
+            '<label for="return_value_id_' + count + '" class="sb-form-line-title col-sm-3 optional"><?php echo __('Return value id');?></label>' +
+            '<div class="col-sm-7">' +
+            '<input type="text" name="return_value_id_' + count + '" id="return_value_id_' + count + '" value="" is_form_horizontal="1" color="color-blue" class="sb-input-return_value_id input-flat return_value_id_' + count + '">' +
+            '</div>' +
+            '<div class="sb-cb"></div>' +
+            '</div>'
+        );
+
+        $(".return_link_url_state").on("change", function () {
             console.log('onchnage....addd_filed');
             var relcounter = $(this).attr('relcounter');
             changeLinkUrl(relcounter);
         });
-        
+
     });
 
-    
-    
-    /*Remove fields from db */ 
-    $(".remove-fields").on("click", function(){
+
+    /*Remove fields from db */
+    $(".remove-fields").on("click", function () {
         var rel = $(this).attr('rel');
-        reload($(this), '<?php echo $this->getUrl('enterprisepayment/application/removefield'); ?>/id/'+rel+'/value_id/'+<?php echo $value_id;?>, true, function(datas) {
-            if(datas.success) {
+        reload($(this), '<?php echo $this->getUrl('enterprisepayment/application/removefield'); ?>/id/' + rel + '/value_id/' +<?php echo $value_id;?>, true, function (datas) {
+            if (datas.success) {
                 console.log(datas);
                 page.reload();
             }
@@ -955,8 +1077,6 @@ $counter_of_fields = $length_of_fields + 1;
     $('.1return_state').tooltip({
         template: '<div class="tooltip"><div class="tooltip-arrow color-blue"></div><div class="tooltip-inner color-blue"></div></div>'
     });
-
-     
 
 
     // if(json_data_setting) {
@@ -1036,168 +1156,183 @@ $counter_of_fields = $length_of_fields + 1;
     //                     }
 
 
-
     //                 });
     //                 $('.return_link_url').append($('<option>', {value:'-1',text:'<?php //echo __('No link');?>'}));
     //                 $('.return_link_url').append($('<option>', {value: 'external_link',text:'<?php // echo __('External Links');?>'}));
     //             });
     //         }
-            
+
     //     }
     // }
 
     function changeLinkUrl(count) {
         console.log(count);
-        $('.add_url_fields_'+count).html('');
-        $('.hide_current_url_'+count).remove();
-        setTimeout(function(){
+        $('.add_url_fields_' + count).html('');
+        $('.hide_current_url_' + count).remove();
+        setTimeout(function () {
             $.ajax({
                 method: "GET",
-                url : "<?php echo $this->getUrl('enterprisepayment/application/getpages'); ?>"              
-            }).then(function( data ) {
-                var get_value = $('#return_link_'+count).val();
-                if( get_value =='-1'){
-                    $(".return_url_"+count).val('');    
-                    $(".return_url_"+count).closest('.sb-form-line').hide();
+                url: "<?php echo $this->getUrl('enterprisepayment/application/getpages'); ?>"
+            }).then(function (data) {
+                var get_value = $('#return_link_' + count).val();
+                if (get_value == '-1') {
+                    $(".return_url_" + count).val('');
+                    $(".return_url_" + count).closest('.sb-form-line').hide();
                 } else {
                     console.log(get_value);
-                    $('.add_url_fields_'+count).append('<div class="form-group sb-form-line" style="display:block"><label for="return_link" class="sb-form-line-title col-sm-3 optional"><?php echo __('URL');?></label>'+
-                     '<div class="col-sm-7">'+
-                     '<input type="text" name="return_link_'+count+'" id="return_link_'+count+'" value="'+get_value+'" is_form_horizontal="1" color="color-blue" class="sb-input-return_link input-flat return_link_'+count+'">'+
-                     '</div>'+
-                     '<div class="sb-cb"></div></div>');
+                    $('.add_url_fields_' + count).append('<div class="form-group sb-form-line" style="display:block"><label for="return_link" class="sb-form-line-title col-sm-3 optional"><?php echo __('URL');?></label>' +
+                        '<div class="col-sm-7">' +
+                        '<input type="text" name="return_link_' + count + '" id="return_link_' + count + '" value="' + get_value + '" is_form_horizontal="1" color="color-blue" class="sb-input-return_link input-flat return_link_' + count + '">' +
+                        '</div>' +
+                        '<div class="sb-cb"></div></div>');
                 }
-                
+
 
             });
-        },500);
-        
+        }, 500);
+
     }
 
 
-    $(".return_link_url").on("change", function(){
+    $(".return_link_url").on("change", function () {
         var count = $(this).attr('relcounter');
         changeLinkUrl(count);
     });
-    
-    
+
+
 </script>
 
 <style type="text/css">
-.sb-tgl-btn {
-    width: 30%;
-}
+    .sb-tgl-btn {
+        width: 30%;
+    }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
 
-.switch input {display:none;}
+    .switch input {
+        display: none;
+    }
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
 
-/* Rounded sliders */
-.slider.round {
-    border-radius: 34px;
-}
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
 
-.slider.round:before {
-    border-radius: 50%;
-}
+    .slider.round:before {
+        border-radius: 50%;
+    }
 
-div#payment-table_length {
-    display: none;
-}
-.bank_transfer_setting{
-    padding-top: 50px;
-}
-button#save_butt {
-    margin-top: 25px;
-}
-.add_more_fields {
-    float: right;
-    margin-top: 12px;
-}
-.bank_form{
-    margin-bottom: 45px;
-}
-div#add_fields_div {
-    padding-top: 5px;
-}
-select.form-control.no-dk.select_type {
-    padding: 0 5px 0 5px !important;
-    font-size: 12px !important;
-}
-.bank-field{
-    width: 83% !important;
-}
-span.edit-action.edit-fields {
-    display: inline-block;
-    padding-right: 12px;
-}
-span.edit-fields-appends{
-   display: inline-block;
-   padding-right: 14px; 
-}
-span.cancel-fields {
-    display: inline-block;
-    padding-left: 12px;
-}
-span.cancel-fields-appends {
-    padding-left: 18px;
-}
-.dataTables_info {
-    padding: 5px;
-    display: inline-block;
-}
-.dataTables_paginate {
-    display: inline-block;
-    float: right;
-}
-.dataTables_paginate a {
-    display: block;
-    float: left;
-    padding: 5px;
-}
+    div#payment-table_length {
+        display: none;
+    }
+
+    .bank_transfer_setting {
+        padding-top: 50px;
+    }
+
+    button#save_butt {
+        margin-top: 25px;
+    }
+
+    .add_more_fields {
+        float: right;
+        margin-top: 12px;
+    }
+
+    .bank_form {
+        margin-bottom: 45px;
+    }
+
+    div#add_fields_div {
+        padding-top: 5px;
+    }
+
+    select.form-control.no-dk.select_type {
+        padding: 0 5px 0 5px !important;
+        font-size: 12px !important;
+    }
+
+    .bank-field {
+        width: 83% !important;
+    }
+
+    span.edit-action.edit-fields {
+        display: inline-block;
+        padding-right: 12px;
+    }
+
+    span.edit-fields-appends {
+        display: inline-block;
+        padding-right: 14px;
+    }
+
+    span.cancel-fields {
+        display: inline-block;
+        padding-left: 12px;
+    }
+
+    span.cancel-fields-appends {
+        padding-left: 18px;
+    }
+
+    .dataTables_info {
+        padding: 5px;
+        display: inline-block;
+    }
+
+    .dataTables_paginate {
+        display: inline-block;
+        float: right;
+    }
+
+    .dataTables_paginate a {
+        display: block;
+        float: left;
+        padding: 5px;
+    }
 </style>
 
 
